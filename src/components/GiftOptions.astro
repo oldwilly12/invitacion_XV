@@ -1,0 +1,85 @@
+---
+import { event } from '../data/event';
+---
+
+<section class="section gift-options">
+  <h2 class="title">{event.regalo.titulo}</h2>
+  <hr class="divider" />
+
+  <p class="message">{event.regalo.mensaje}</p>
+
+  <p class="suggestion">{event.regalo.sugerencia}</p>
+
+  <div class="badge">
+    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 18h36v22H6z" />
+      <path d="M6 18l18 13 18-13" />
+      <path d="M15 18l6-9h6l6 9" />
+      <circle cx="24" cy="13" r="4.2" />
+      <text x="24" y="15.5" font-size="6.5" font-family="Georgia, serif" text-anchor="middle" fill="currentColor" stroke="none">$</text>
+    </svg>
+  </div>
+
+  <p class="closing">{event.regalo.cierre}</p>
+</section>
+
+<style>
+  .gift-options {
+    background:
+      radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.1), transparent 60%),
+      linear-gradient(160deg, var(--color-olive-dark) 0%, var(--color-olive) 60%, var(--color-olive-soft) 100%);
+  }
+
+  .title {
+    font-size: 2rem;
+    font-style: italic;
+    color: var(--accent-gold);
+  }
+
+  .gift-options :global(.divider) {
+    background: var(--accent-gold);
+  }
+
+  .message {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--color-cream);
+  }
+
+  .suggestion {
+    margin-top: 1.5rem;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+  }
+
+  .badge {
+    width: 4.5rem;
+    height: 4.5rem;
+    margin: 2rem auto;
+    border-radius: 50%;
+    background: var(--color-cream);
+    border: 2px solid var(--accent-gold);
+    color: var(--color-olive-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  }
+
+  .badge svg {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+
+  .closing {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--color-cream);
+    opacity: 0.9;
+  }
+</style>

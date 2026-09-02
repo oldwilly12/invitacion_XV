@@ -1,0 +1,83 @@
+---
+import { event } from '../data/event';
+---
+
+<section class="section rsvp">
+  <p class="eyebrow">Confirma tu asistencia</p>
+  <hr class="divider" />
+  <p class="deadline">Antes del {event.rsvp.fechaLimite}</p>
+
+  <form class="rsvp-form" data-whatsapp={event.rsvp.whatsapp}>
+    <input
+      type="text"
+      name="nombre"
+      placeholder="Tu nombre completo"
+      required
+    />
+    <button type="submit" class="cta">Confirmar por WhatsApp</button>
+  </form>
+</section>
+
+<style>
+  .deadline {
+    font-size: 0.8rem;
+    opacity: 0.75;
+    margin-bottom: 1.5rem;
+  }
+
+  .rsvp-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .rsvp-form input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--frame);
+    border-radius: 8px;
+    background: var(--bg-base);
+    color: var(--text-body);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+  }
+
+  .rsvp-form input::placeholder {
+    color: var(--text-heading);
+    opacity: 0.5;
+  }
+
+  .cta {
+    padding: 0.85rem 2rem;
+    border: 1px solid var(--accent-gold);
+    border-radius: 999px;
+    background: var(--color-olive-dark);
+    color: var(--color-cream);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .cta:hover {
+    opacity: 0.85;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('.rsvp-form').forEach((form) => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const phone = form.dataset.whatsapp;
+      const data = new FormData(form);
+      const nombre = data.get('nombre');
+
+      const text = encodeURIComponent(`¡Hola! Confirmo mi asistencia 🎉\nNombre: ${nombre}`);
+
+      window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+    });
+  });
+</script>

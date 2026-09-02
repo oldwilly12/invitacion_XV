@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <circle cx="16" cy="16" r="15.5" fill="#556B2F" />
+  <text
+    x="16"
+    y="21.6"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="16"
+    font-weight="600"
+    letter-spacing="0.3"
+    fill="#D4AF37"
+  >RN</text>
+</svg>

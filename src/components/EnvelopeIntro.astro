@@ -1,0 +1,251 @@
+---
+import { event } from '../data/event';
+
+const iniciales = event.quinceañera
+  .split(' ')
+  .filter(Boolean)
+  .map((palabra) => palabra[0])
+  .join('');
+---
+
+<div id="envelope-intro" class="intro">
+  <button id="envelope" class="envelope" type="button" aria-label="Abrir invitación">
+    <span class="env-back"></span>
+
+    <span class="card">
+      <span class="card-eyebrow">Mis XV Años</span>
+      <span class="card-name">{event.quinceañera}</span>
+      <span class="card-rule"></span>
+      <span class="card-date">{event.fechaLegible}</span>
+    </span>
+
+    <span class="env-front"></span>
+    <span class="env-flap"></span>
+    <span class="seal">{iniciales}</span>
+  </button>
+
+  <p class="hint">Toca para abrir</p>
+</div>
+
+<noscript>
+  <style>
+    #envelope-intro { display: none; }
+  </style>
+</noscript>
+
+<style>
+  /* Mientras el sobre siga presente, la invitación no se desplaza detrás. */
+  :global(html:has(#envelope-intro:not(.is-done))) {
+    overflow: hidden;
+  }
+
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 2.5rem;
+    padding: 1.5rem;
+    background:
+      radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.12), transparent 60%),
+      linear-gradient(160deg, var(--color-olive-dark) 0%, var(--color-olive) 60%, var(--color-olive-soft) 100%);
+    transition: opacity 0.6s ease, visibility 0.6s;
+  }
+
+  .intro.is-done {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .envelope {
+    position: relative;
+    width: min(76vw, 310px);
+    aspect-ratio: 1.5 / 1;
+    perspective: 1400px;
+  }
+
+  .envelope:focus-visible {
+    outline: 1px solid var(--accent-gold);
+    outline-offset: 10px;
+  }
+
+  .env-back,
+  .env-front,
+  .env-flap,
+  .card {
+    position: absolute;
+  }
+
+  .env-back {
+    inset: 0;
+    background: var(--color-beige);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+  }
+
+  .card {
+    left: 5%;
+    bottom: 4%;
+    width: 90%;
+    height: 96%;
+    background: var(--color-cream);
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 1rem;
+    z-index: 2;
+    transition:
+      transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) 0.5s,
+      box-shadow 0.9s ease 0.5s;
+  }
+
+  .card-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-heading);
+    opacity: 0.85;
+  }
+
+  .card-name {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: clamp(1.5rem, 7vw, 2rem);
+    line-height: 1.1;
+    color: var(--accent-gold);
+  }
+
+  .card-rule {
+    width: 42px;
+    height: 1px;
+    background: var(--accent-gold);
+    margin: 0.35rem 0;
+  }
+
+  .card-date {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    color: var(--text-body);
+  }
+
+  /* La bolsa frontal y la solapa comparten exactamente las mismas diagonales
+     (esquinas superiores → vértice central), así el sobre cerrado no deja
+     ninguna franja por donde se asome la tarjeta. */
+  .env-front {
+    inset: 0;
+    background: var(--color-linen);
+    clip-path: polygon(0 0, 50% 62%, 100% 0, 100% 100%, 0 100%);
+    filter: drop-shadow(0 -1px 0 rgba(212, 175, 55, 0.5));
+    z-index: 3;
+  }
+
+  .env-flap {
+    inset: 0;
+    background: var(--color-beige);
+    clip-path: polygon(0 0, 100% 0, 50% 62%);
+    filter: drop-shadow(0 1px 0 rgba(212, 175, 55, 0.5));
+    transform-origin: top center;
+    transform: rotateX(0deg);
+    z-index: 4;
+    transition:
+      transform 0.75s cubic-bezier(0.6, 0.03, 0.28, 1) 0.1s,
+      z-index 0s linear 0.45s;
+  }
+
+  .seal {
+    left: 50%;
+    top: 40%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 3.1rem;
+    height: 3.1rem;
+    border-radius: 50%;
+    background: var(--color-olive-dark);
+    border: 1px solid var(--accent-gold);
+    display: grid;
+    place-items: center;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    color: var(--accent-gold);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    z-index: 5;
+    transition: opacity 0.3s ease, transform 0.4s ease;
+  }
+
+  .hint {
+    margin: 0;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--color-cream);
+    opacity: 0.75;
+    animation: breathe 2.6s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% { opacity: 0.45; }
+    50% { opacity: 0.9; }
+  }
+
+  /* --- Estado abierto --- */
+  .intro.is-opening .env-flap {
+    transform: rotateX(180deg);
+    z-index: 0;
+  }
+
+  .intro.is-opening .card {
+    transform: translateY(-60%);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  }
+
+  .intro.is-opening .seal {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+
+  .intro.is-opening .hint {
+    opacity: 0;
+    animation: none;
+    transition: opacity 0.3s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card,
+    .env-flap,
+    .seal {
+      transition-duration: 0.01s;
+      transition-delay: 0s;
+    }
+
+    .hint {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const intro = document.getElementById('envelope-intro');
+  const envelope = document.getElementById('envelope');
+
+  if (intro && envelope) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    envelope.addEventListener('click', () => {
+      if (intro.classList.contains('is-opening')) return;
+
+      intro.classList.add('is-opening');
+
+      window.setTimeout(() => {
+        intro.classList.add('is-done');
+        window.setTimeout(() => intro.remove(), 700);
+      }, reduceMotion ? 250 : 1900);
+    });
+  }
+</script>

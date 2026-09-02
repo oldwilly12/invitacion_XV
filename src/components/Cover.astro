@@ -1,0 +1,126 @@
+---
+import { event } from '../data/event';
+---
+
+<section class="cover">
+  <img class="cover-bg" src="/images/invitacion_imagen.png" alt={`Mis XV Años — ${event.quinceañera}`} />
+
+  <button id="music-toggle" type="button" aria-label="Reproducir música" aria-pressed="false">
+    <svg class="icon icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M8 5v14l11-7z" />
+    </svg>
+    <svg class="icon icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
+    </svg>
+  </button>
+
+  <p class="scroll-hint">↓ Desliza para ver más ↓</p>
+</section>
+
+<style>
+  .cover {
+    position: relative;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .cover-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    top: 89%;
+    left: 0;
+    right: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-cream);
+    opacity: 0.6;
+    text-align: center;
+    animation: bounce 2.5s ease-in-out infinite;
+    z-index: 1;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); opacity: 0.6; }
+    50% { transform: translateY(8px); opacity: 1; }
+  }
+
+  #music-toggle {
+    position: absolute;
+    top: 74%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 3rem;
+    height: 3rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid var(--accent-gold);
+    background: var(--color-olive-dark);
+    color: var(--color-cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(74, 93, 35, 0.35);
+    padding: 0;
+    z-index: 1;
+  }
+
+  .icon {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  .icon-pause {
+    display: none;
+  }
+
+  #music-toggle.playing {
+    animation: spin 6s linear infinite;
+  }
+
+  #music-toggle.playing .icon-play {
+    display: none;
+  }
+
+  #music-toggle.playing .icon-pause {
+    display: block;
+  }
+
+  @keyframes spin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+</style>
+
+<script>
+  const audio = document.getElementById('bg-music') as HTMLAudioElement;
+  const toggle = document.getElementById('music-toggle') as HTMLButtonElement;
+
+  toggle.addEventListener('click', async () => {
+    if (audio.paused) {
+      try {
+        await audio.play();
+        toggle.classList.add('playing');
+        toggle.setAttribute('aria-pressed', 'true');
+        toggle.setAttribute('aria-label', 'Pausar música');
+      } catch {
+        // El navegador bloqueó la reproducción; el usuario puede reintentar.
+      }
+    } else {
+      audio.pause();
+      toggle.classList.remove('playing');
+      toggle.setAttribute('aria-pressed', 'false');
+      toggle.setAttribute('aria-label', 'Reproducir música');
+    }
+  });
+</script>

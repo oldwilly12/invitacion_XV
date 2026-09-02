@@ -1,0 +1,34 @@
+---
+import { event } from '../data/event';
+---
+
+<section class="section godparents">
+  <div class="block">
+    <p class="eyebrow">{event.padres.titulo}</p>
+    <h2 class="names">{event.padres.nombres.join(' & ')}</h2>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="block">
+    <p class="eyebrow">{event.padrinos.titulo}</p>
+    <h2 class="names">{event.padrinos.nombres.join(' & ')}</h2>
+  </div>
+</section>
+
+<style>
+  .godparents {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .block {
+    padding: 0.5rem 0;
+  }
+
+  .names {
+    font-size: 1.3rem;
+    font-style: italic;
+  }
+</style>
