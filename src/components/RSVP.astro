@@ -18,10 +18,30 @@ import { event } from '../data/event';
   </form>
 
   <div id="rsvp-success" class="rsvp-success" hidden>
-    <p class="success-title">¡Gracias, <span id="rsvp-success-name"></span>!</p>
+    <p class="success-title">¡Gracias, <span class="rsvp-success-name">​</span>!</p>
     <p class="success-note">Tu confirmación se envió por WhatsApp. ¡Te esperamos! 💚</p>
   </div>
 </section>
+
+<div
+  id="rsvp-fullscreen"
+  class="rsvp-fullscreen"
+  role="button"
+  tabindex="0"
+  aria-label="Cerrar y volver a la invitación"
+  hidden
+>
+  <div class="fs-badge">
+    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 25l8 8 16-18" />
+    </svg>
+  </div>
+
+  <p class="fs-title">¡Gracias, <span class="rsvp-success-name">​</span>!</p>
+  <p class="fs-note">Tu confirmación se envió por WhatsApp.<br />¡Te esperamos! 💚</p>
+
+  <p class="fs-hint">Toca para continuar</p>
+</div>
 
 <style>
   .deadline {
@@ -91,6 +111,80 @@ import { event } from '../data/event';
     color: var(--text-body);
     margin: 0;
   }
+
+  /* --- Pantalla completa al confirmar --- */
+  .rsvp-fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 1.1rem;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    background:
+      radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.12), transparent 60%),
+      linear-gradient(160deg, var(--color-olive-dark) 0%, var(--color-olive) 60%, var(--color-olive-soft) 100%);
+    opacity: 1;
+    transition: opacity 0.5s ease;
+  }
+
+  /* El atributo `hidden` es el estado seguro por defecto (sin JS, o antes
+     de que corra el script, no debe cubrir la invitación). El `display: grid`
+     de arriba tiene más prioridad que el `[hidden]` del navegador, así que
+     hay que restaurarlo explícitamente aquí. */
+  .rsvp-fullscreen[hidden] {
+    display: none;
+  }
+
+  .rsvp-fullscreen.is-closing {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .fs-badge {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    background: var(--color-cream);
+    border: 2px solid var(--accent-gold);
+    color: var(--color-olive-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  }
+
+  .fs-badge svg {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+
+  .fs-title {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 1.9rem;
+    color: var(--accent-gold);
+    margin: 0.5rem 0 0;
+  }
+
+  .fs-note {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--color-cream);
+    margin: 0;
+  }
+
+  .fs-hint {
+    margin: 1.5rem 0 0;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--color-cream);
+    opacity: 0.6;
+  }
 </style>
 
 <script>
@@ -98,19 +192,48 @@ import { event } from '../data/event';
 
   const form = document.getElementById('rsvp-form') as HTMLFormElement | null;
   const success = document.getElementById('rsvp-success');
-  const successName = document.getElementById('rsvp-success-name');
+  const fullscreen = document.getElementById('rsvp-fullscreen');
+  const nameSlots = document.querySelectorAll('.rsvp-success-name');
 
-  function showSuccess(nombre: string) {
-    if (successName) successName.textContent = nombre;
+  function setNombre(nombre: string) {
+    nameSlots.forEach((slot) => {
+      slot.textContent = nombre;
+    });
+  }
+
+  function showInlineSuccess() {
     if (form) form.hidden = true;
     if (success) success.hidden = false;
   }
+
+  function showFullscreen() {
+    if (!fullscreen) return;
+    fullscreen.hidden = false;
+    fullscreen.classList.remove('is-closing');
+  }
+
+  function hideFullscreen() {
+    if (!fullscreen || fullscreen.hidden) return;
+    fullscreen.classList.add('is-closing');
+    window.setTimeout(() => {
+      fullscreen.hidden = true;
+    }, 500);
+  }
+
+  fullscreen?.addEventListener('click', hideFullscreen);
+  fullscreen?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      hideFullscreen();
+    }
+  });
 
   const guardado = localStorage.getItem(STORAGE_KEY);
   if (guardado) {
     try {
       const { nombre } = JSON.parse(guardado);
-      showSuccess(nombre);
+      setNombre(nombre);
+      showInlineSuccess();
     } catch {
       // dato guardado inválido, se ignora
     }
@@ -126,7 +249,9 @@ import { event } from '../data/event';
     const text = encodeURIComponent(`¡Hola! Confirmo mi asistencia 🎉\nNombre: ${nombre}`);
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ nombre }));
-    showSuccess(nombre);
+    setNombre(nombre);
+    showInlineSuccess();
+    showFullscreen();
 
     window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
   });
