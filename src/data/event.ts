@@ -55,7 +55,7 @@ export const event = {
   },
 
   rsvp: {
-    whatsapp: '528711239289', // sin '+', formato internacional
+    whatsapp: '5218711239289', // sin '+', formato internacional (México lleva 52 + 1 + 10 dígitos)
     fechaLimite: '30 de Octubre, 2026',
   },
 
