@@ -8,7 +8,7 @@ import { event } from '../data/event';
   <p class="deadline">Antes del {event.rsvp.fechaLimite}</p>
 
   <p id="rsvp-pases" class="pases" data-default={event.rsvp.pasesPorDefecto}>
-    Tienes <span class="pases-num">0</span> pases
+    Tienes <span class="pases-num">0</span> <span class="pases-word">pases</span>
   </p>
 
   <form id="rsvp-form" class="rsvp-form" data-whatsapp={event.rsvp.whatsapp}>
@@ -231,6 +231,7 @@ import { event } from '../data/event';
   const nameSlots = document.querySelectorAll('.rsvp-success-name');
   const pasesEl = document.getElementById('rsvp-pases');
   const pasesNumEl = document.querySelector('.pases-num');
+  const pasesWordEl = document.querySelector('.pases-word');
 
   function getPases(): number {
     const fallback = Number(pasesEl?.dataset.default) || 1;
@@ -243,6 +244,9 @@ import { event } from '../data/event';
   const pases = getPases();
   if (pasesNumEl) {
     pasesNumEl.textContent = String(pases);
+  }
+  if (pasesWordEl) {
+    pasesWordEl.textContent = pases === 1 ? 'pase' : 'pases';
   }
 
   function setNombre(nombre: string) {
