@@ -106,9 +106,14 @@ import { event } from '../data/event';
   const audio = document.getElementById('bg-music') as HTMLAudioElement;
   const toggle = document.getElementById('music-toggle') as HTMLButtonElement;
 
+  const START_TIME = 60; // segundos: la canción arranca en el minuto 1
+
   toggle.addEventListener('click', async () => {
     if (audio.paused) {
       try {
+        if (audio.currentTime === 0) {
+          audio.currentTime = START_TIME;
+        }
         await audio.play();
         toggle.classList.add('playing');
         toggle.setAttribute('aria-pressed', 'true');

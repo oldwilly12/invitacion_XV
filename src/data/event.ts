@@ -57,6 +57,7 @@ export const event = {
   rsvp: {
     whatsapp: '5218711239289', // sin '+', formato internacional (México lleva 52 + 1 + 10 dígitos)
     fechaLimite: '30 de Octubre, 2026',
+    pasesPorDefecto: 1, // se usa si el link no trae "?pases=" en la URL
   },
 
   musica: {

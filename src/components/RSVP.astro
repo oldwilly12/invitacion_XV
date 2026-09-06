@@ -7,6 +7,10 @@ import { event } from '../data/event';
   <hr class="divider" />
   <p class="deadline">Antes del {event.rsvp.fechaLimite}</p>
 
+  <p id="rsvp-pases" class="pases" data-default={event.rsvp.pasesPorDefecto}>
+    Tienes <span class="pases-num">0</span> pases
+  </p>
+
   <form id="rsvp-form" class="rsvp-form" data-whatsapp={event.rsvp.whatsapp}>
     <input
       type="text"
@@ -47,7 +51,38 @@ import { event } from '../data/event';
   .deadline {
     font-size: 0.8rem;
     opacity: 0.75;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .pases {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-heading);
+    margin: 0 0 1.5rem;
+  }
+
+  .pases-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.2rem;
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 2.1rem;
+    line-height: 1;
+    color: var(--color-cream);
+    background: var(--color-olive-dark);
+    border: 2px solid var(--accent-gold);
+    border-radius: 10px;
+    padding: 0.4rem 0.9rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   }
 
   .rsvp-form {
@@ -194,6 +229,21 @@ import { event } from '../data/event';
   const success = document.getElementById('rsvp-success');
   const fullscreen = document.getElementById('rsvp-fullscreen');
   const nameSlots = document.querySelectorAll('.rsvp-success-name');
+  const pasesEl = document.getElementById('rsvp-pases');
+  const pasesNumEl = document.querySelector('.pases-num');
+
+  function getPases(): number {
+    const fallback = Number(pasesEl?.dataset.default) || 1;
+    const raw = new URLSearchParams(window.location.search).get('pases');
+    const n = Number(raw);
+    if (!raw || !Number.isInteger(n) || n < 1) return fallback;
+    return Math.min(n, 20);
+  }
+
+  const pases = getPases();
+  if (pasesNumEl) {
+    pasesNumEl.textContent = String(pases);
+  }
 
   function setNombre(nombre: string) {
     nameSlots.forEach((slot) => {
@@ -246,7 +296,9 @@ import { event } from '../data/event';
     const nombre = String(data.get('nombre') ?? '').trim();
     if (!nombre) return;
 
-    const text = encodeURIComponent(`¡Hola! Confirmo mi asistencia 🎉\nNombre: ${nombre}`);
+    const text = encodeURIComponent(
+      `¡Hola! Confirmo mi asistencia 🎉\nNombre: ${nombre}\nPases: ${pases}`
+    );
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ nombre }));
     setNombre(nombre);
