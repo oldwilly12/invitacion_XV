@@ -296,9 +296,7 @@ import { event } from '../data/event';
     const nombre = String(data.get('nombre') ?? '').trim();
     if (!nombre) return;
 
-    const text = encodeURIComponent(
-      `¡Hola! Confirmo mi asistencia 🎉\nNombre: ${nombre}\nPases: ${pases}`
-    );
+    const text = encodeURIComponent(`¡Hola! Confirmo mi asistencia 🎉\nNombre: ${nombre}`);
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ nombre }));
     setNombre(nombre);
