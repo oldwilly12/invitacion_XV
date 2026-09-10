@@ -6,7 +6,6 @@ import { event } from '../data/event';
   <p class="eyebrow">Bienvenida</p>
   <hr class="divider" />
   <p class="message">{event.bienvenida}</p>
-  <p class="signature">— {event.padres.nombres.join(' & ')}</p>
 </section>
 
 <style>
@@ -20,12 +19,5 @@ import { event } from '../data/event';
     font-style: italic;
     line-height: 1.8;
     color: var(--text-body);
-  }
-
-  .signature {
-    margin-top: 1.5rem;
-    font-size: 0.85rem;
-    letter-spacing: 0.05em;
-    color: var(--text-heading);
   }
 </style>
