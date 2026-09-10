@@ -1,0 +1,78 @@
+---
+import QRCode from 'qrcode';
+import { event } from '../data/event';
+
+const qrSvg = await QRCode.toString(event.compartirFotos.album, {
+  type: 'svg',
+  margin: 0,
+  color: {
+    dark: '#4A5D23',
+    light: '#00000000',
+  },
+});
+---
+
+<section class="section photo-share">
+  <h2 class="title">{event.compartirFotos.titulo}</h2>
+  <hr class="divider" />
+
+  <p class="message">{event.compartirFotos.mensaje}</p>
+
+  <div class="qr-wrap">
+    <Fragment set:html={qrSvg} />
+  </div>
+
+  <a class="link" href={event.compartirFotos.album} target="_blank" rel="noopener noreferrer">
+    Ver álbum de fotos
+  </a>
+</section>
+
+<style>
+  .photo-share {
+    position: relative;
+    background: var(--bg-alt);
+  }
+
+  .title {
+    font-size: 2rem;
+    font-style: italic;
+    color: var(--color-olive-dark);
+  }
+
+  .photo-share :global(.divider) {
+    background: var(--color-olive-dark);
+  }
+
+  .message {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text-body);
+  }
+
+  .qr-wrap {
+    width: 10rem;
+    height: 10rem;
+    margin: 2rem auto;
+    padding: 0.75rem;
+    background: var(--color-cream);
+    border: 2px solid var(--color-olive-dark);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 14px rgba(74, 93, 35, 0.25);
+  }
+
+  .qr-wrap :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .link {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--color-olive-dark);
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+  }
+</style>

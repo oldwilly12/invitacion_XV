@@ -46,6 +46,13 @@ export const event = {
     cierre: 'Deseamos que esta decisión no les impida asistir y celebrar este evento.',
   },
 
+  compartirFotos: {
+    titulo: 'Comparte tus fotos',
+    mensaje:
+      'El día del evento, captura esos momentos únicos y compártelos con nosotros. Escanea el código QR y sube tus fotos a nuestro álbum digital para revivir juntos cada recuerdo de este día tan especial.',
+    album: 'https://photos.app.goo.gl/Lv7aKeyBZ1aUPJed7',
+  },
+
   regalo: {
     titulo: 'Opciones de Regalo',
     mensaje:
