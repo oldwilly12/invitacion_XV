@@ -23,6 +23,7 @@ import { event } from '../data/event';
       placeholder="Tu nombre completo"
       required
     />
+    <p class="hint">Escribe tu nombre completo para identificarte sin confusiones con otros invitados.</p>
     <button type="submit" class="cta">Confirmar por WhatsApp</button>
   </form>
 
@@ -110,6 +111,14 @@ import { event } from '../data/event';
   .rsvp-form input::placeholder {
     color: var(--text-heading);
     opacity: 0.5;
+  }
+
+  .hint {
+    margin: -0.5rem 0 0;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--text-body);
+    opacity: 0.75;
   }
 
   .cta {
