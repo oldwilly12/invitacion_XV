@@ -11,7 +11,12 @@ import { event } from '../data/event';
     Tienes <span class="pases-num">0</span> <span class="pases-word">pases</span>
   </p>
 
-  <form id="rsvp-form" class="rsvp-form" data-whatsapp={event.rsvp.whatsapp}>
+  <form
+    id="rsvp-form"
+    class="rsvp-form"
+    data-whatsapp={event.rsvp.whatsapp}
+    data-sheet-url={event.rsvp.sheetWebAppUrl}
+  >
     <input
       type="text"
       name="nombre"
@@ -293,6 +298,19 @@ import { event } from '../data/event';
     }
   }
 
+  function registrarEnSheet(nombre: string, pases: number) {
+    const sheetUrl = form?.dataset.sheetUrl;
+    if (!sheetUrl) return;
+
+    fetch(sheetUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: new URLSearchParams({ nombre, pases: String(pases) }),
+    }).catch(() => {
+      // No bloqueamos la confirmación por WhatsApp si el registro falla.
+    });
+  }
+
   form?.addEventListener('submit', (e) => {
     e.preventDefault();
     const phone = form.dataset.whatsapp;
@@ -306,6 +324,7 @@ import { event } from '../data/event';
     setNombre(nombre);
     showInlineSuccess();
     showFullscreen();
+    registrarEnSheet(nombre, pases);
 
     window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
   });

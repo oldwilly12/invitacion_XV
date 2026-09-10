@@ -65,6 +65,8 @@ export const event = {
     whatsapp: '5218711239289', // sin '+', formato internacional (México lleva 52 + 1 + 10 dígitos)
     fechaLimite: '30 de Octubre, 2026',
     pasesPorDefecto: 1, // se usa si el link no trae "?pases=" en la URL
+    // URL del Web App de Google Apps Script (ver instrucciones). Vacío = no se registra en el Sheet.
+    sheetWebAppUrl: 'https://script.google.com/macros/s/AKfycbwf7CNR9im0WxLZP8QrGXl27dEUvZ0PA7JIxX7Ci-aO_yQyROTkoJKk6uQoMbhUiW-g/exec',
   },
 
   musica: {
